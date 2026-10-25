@@ -1,0 +1,25 @@
+# Supabase CLI configuration (local development & deployment)
+project_id = "home-heroes"
+
+[api]
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+
+[auth]
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/", "https://*.github.io/"]
+minimum_password_length = 8
+
+[auth.email]
+enable_confirmations = true
+
+# These functions accept the new publishable/secret keys, so the gateway JWT
+# check is disabled and every request is authorised inside the function code.
+[functions.child-login]
+verify_jwt = false
+
+[functions.manage-child]
+verify_jwt = false
+
+[functions.manage-family]
+verify_jwt = false

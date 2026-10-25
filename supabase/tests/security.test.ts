@@ -225,6 +225,17 @@ describe('audit, export and deletion', () => {
     }
   });
 
+  it('deletes a single child with their history (service role only)', async () => {
+    const f = await setupFamily(db, 'delta');
+    const task = await taskId(db, f.familyId, 'Prayers');
+    const [{ s }] = await db.as.user<{ s: Json }>(f.children.obai.userId, `select public.submit_task($1, $2) as s`, [task, f.today]);
+    await db.as.user(f.fatherId, `select public.review_submission($1, 'approve')`, [s.id]);
+    await expectError(db.as.user(f.fatherId, `select public.svc_delete_child($1)`, [f.children.obai.childId]), /permission denied/);
+    await db.as.service(`select public.svc_delete_child($1)`, [f.children.obai.childId]);
+    expect(await db.rows(`select 1 from public.point_events where child_id = $1`, [f.children.obai.childId])).toHaveLength(0);
+    expect(await db.as.user<Json>(f.fatherId, `select id from public.children`)).toHaveLength(3);
+  });
+
   it('applies retention without touching weekly snapshots', async () => {
     await expectError(db.as.user(a.motherId, `select public.apply_retention($1)`, [a.familyId]), /forbidden/);
     await db.as.user(a.fatherId, `update public.family_settings set retention_months = 12`);

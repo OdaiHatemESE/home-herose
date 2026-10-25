@@ -518,6 +518,19 @@ begin
   delete from private.login_attempts where created_at < now() - interval '2 days';
 end $$;
 
+-- Generic sliding-window limiter for sensitive endpoints (credential resets etc.).
+-- Returns true when the call is allowed (and records it).
+create or replace function public.svc_rate_limit(p_key text, p_max integer, p_window_seconds integer)
+returns boolean language plpgsql security definer set search_path = '' as $$
+begin
+  if (select count(*) from private.login_attempts
+      where attempt_key = p_key and created_at > now() - make_interval(secs => p_window_seconds)) >= p_max then
+    return false;
+  end if;
+  insert into private.login_attempts (attempt_key, success) values (p_key, true);
+  return true;
+end $$;
+
 create or replace function public.svc_register_child_auth(p_child uuid, p_user uuid, p_email text)
 returns void language plpgsql security definer set search_path = '' as $$
 begin
@@ -543,6 +556,15 @@ create or replace function public.svc_revoke_sessions(p_user uuid)
 returns void language sql security definer set search_path = '' as $$
   delete from auth.sessions where user_id = p_user;
 $$;
+
+-- Removes a child and all of their history (parent-confirmed in manage-child).
+create or replace function public.svc_delete_child(p_child uuid)
+returns void language plpgsql security definer set search_path = '' as $$
+begin
+  perform set_config('app.purging', 'on', true);
+  delete from public.children where id = p_child;
+  perform set_config('app.purging', 'off', true);
+end $$;
 
 -- Hard-deletes a family. Called by the manage-family Edge Function after it has
 -- verified the caller is the owner and removed child auth users.
@@ -596,11 +618,13 @@ grant execute on function
   public.svc_resolve_child_login(text, text),
   public.svc_login_blocked(text, text),
   public.svc_record_login(text, text, boolean),
+  public.svc_rate_limit(text, integer, integer),
   public.svc_register_child_auth(uuid, uuid, text),
   public.svc_child_auth(uuid),
   public.svc_bump_credential(uuid),
   public.svc_revoke_sessions(uuid),
-  public.svc_purge_family(uuid)
+  public.svc_purge_family(uuid),
+  public.svc_delete_child(uuid)
 to service_role;
 
 -- new functions are private by default
