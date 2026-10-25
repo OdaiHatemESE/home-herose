@@ -76,8 +76,8 @@ describe('daily scoring', () => {
   });
 
   it('awards +1 when the parent logged a reminder, even if the child claimed independence', async () => {
-    const task = await taskId(db, f.familyId, 'Prayers');
     const child = f.children.retal;
+    const task = await taskId(db, f.familyId, 'Bedroom and clothes');
     await db.as.user(f.fatherId, `select public.log_reminder($1, $2)`, [child.childId, task]);
     const [{ s }] = await db.as.user<{ s: Json }>(child.userId,
       `select public.submit_task($1, $2, 'independent') as s`, [task, f.today]);
@@ -105,8 +105,8 @@ describe('daily scoring', () => {
   });
 
   it('records reversals immutably and allows a corrected resubmission to be re-awarded', async () => {
-    const task = await taskId(db, f.familyId, 'Quran revision');
     const child = f.children.obai;
+    const task = await taskId(db, f.familyId, 'Household responsibility', child.childId);
     const [{ s }] = await db.as.user<{ s: Json }>(child.userId, `select public.submit_task($1, $2) as s`, [task, f.today]);
     await db.as.user(f.fatherId, `select public.review_submission($1, 'approve')`, [s.id]);
     const [ev] = await db.as.user<Json>(f.fatherId, `select id from public.point_events where source_id = $1`, [s.id]);
@@ -135,6 +135,14 @@ describe('daily scoring', () => {
     expect(s.status).toBe('approved');
     expect(s.auto_approved).toBe(true);
     expect(s.awarded_points).toBe(2);
+  });
+
+  it('auto-accepts worship self-reports without verification or sampling', async () => {
+    const task = await taskId(db, f.familyId, 'Prayers');
+    const [{ s }] = await db.as.user<{ s: Json }>(f.children.hatem.userId,
+      `select public.submit_task($1, $2, 'independent', 100, '{"fajr":true}'::jsonb) as s`, [task, f.today]);
+    expect(s.status).toBe('approved');
+    expect(s.needs_review).toBe(false);
   });
 
   it('saves partial progress without awarding points', async () => {

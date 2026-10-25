@@ -363,7 +363,7 @@ begin
       'priority', t.priority,
       'is_religious', t.is_religious,
       'checklist', t.checklist,
-      'requires_verification', t.requires_verification and not t.auto_approve,
+      'requires_verification', t.requires_verification and not t.auto_approve and not t.is_religious,
       'base_points', p.base_points,
       'independence_bonus', p.independence_bonus,
       'counts_toward_max', t.recurrence <> 'occasional',
@@ -531,14 +531,15 @@ begin
     returning * into v_sub;
   end if;
 
-  -- low-risk tasks can be accepted automatically (with optional random sampling)
-  if v_status = 'pending' and (v_task.auto_approve or not v_task.requires_verification) then
+  -- low-risk tasks can be accepted automatically (with optional random sampling);
+  -- worship is respectful self-reporting and is never verified or sampled
+  if v_status = 'pending' and (v_task.auto_approve or not v_task.requires_verification or v_task.is_religious) then
     update public.task_submissions set
       status = 'approved',
       final_mode = v_mode,
       awarded_points = v_claimed,
       auto_approved = true,
-      needs_review = random() < v_task.review_sample_rate,
+      needs_review = not v_task.is_religious and random() < v_task.review_sample_rate,
       reviewed_at = now()
     where id = v_sub.id
     returning * into v_sub;
