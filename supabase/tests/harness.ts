@@ -41,8 +41,11 @@ type Actor = {
   service: <T = Record<string, unknown>>(sql: string, params?: unknown[]) => Promise<T[]>;
 };
 
-export async function createDb(): Promise<Db> {
-  const db = new PGlite() as Db;
+export async function createDb(opts: { postgrestTypes?: boolean } = {}): Promise<Db> {
+  // postgrestTypes: return values the way PostgREST serialises them (dates as yyyy-mm-dd, numerics as numbers)
+  const db = (opts.postgrestTypes
+    ? new PGlite({ parsers: { 1082: (v: string) => v, 1700: (v: string) => Number(v) } })
+    : new PGlite()) as Db;
   await db.exec(SUPABASE_SHIM);
   for (const file of readdirSync(MIGRATIONS_DIR).filter((f) => f.endsWith('.sql')).sort()) {
     try {

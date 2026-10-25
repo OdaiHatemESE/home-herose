@@ -7,6 +7,8 @@ export function useChildDay(childId: string | undefined, date: string) {
   return useQuery({
     queryKey: ['day', childId, date],
     enabled: !!childId,
+    staleTime: 0,
+    refetchInterval: 60_000,
     queryFn: async () => must(await supabase.rpc('get_child_day', { p_child: childId!, p_date: date })),
   });
 }
@@ -15,6 +17,7 @@ export function useChildProgress(childId: string | undefined, from: string, to: 
   return useQuery({
     queryKey: ['progress', childId, from, to],
     enabled: !!childId,
+    staleTime: 0,
     queryFn: async () => must(await supabase.rpc('get_child_progress', { p_child: childId!, p_from: from, p_to: to })),
   });
 }
@@ -22,6 +25,7 @@ export function useChildProgress(childId: string | undefined, from: string, to: 
 export function useFamilyWeek(familyId: string, weekStart: string) {
   return useQuery({
     queryKey: ['family-week', familyId, weekStart],
+    staleTime: 0,
     queryFn: async () => must(await supabase.rpc('get_family_week', { p_family: familyId, p_week_start: weekStart })),
   });
 }
@@ -29,6 +33,10 @@ export function useFamilyWeek(familyId: string, weekStart: string) {
 export function usePendingSubmissions(familyId: string) {
   return useQuery({
     queryKey: ['submissions', 'pending', familyId],
+    // review queues change because of other people (children); never serve them stale
+    staleTime: 0,
+    refetchOnMount: 'always',
+    refetchInterval: 30_000,
     queryFn: async () =>
       must(
         await supabase

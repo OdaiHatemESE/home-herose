@@ -5,6 +5,9 @@ import { must } from './core';
 export function useInitiatives(filter: { familyId?: string; childId?: string; status?: 'pending' | 'approved' | 'rejected'; limit?: number }) {
   return useQuery({
     queryKey: ['initiatives', filter],
+    staleTime: filter.status === 'pending' ? 0 : undefined,
+    refetchOnMount: filter.status === 'pending' ? 'always' : true,
+    refetchInterval: filter.status === 'pending' ? 30_000 : undefined,
     queryFn: async () => {
       let q = supabase.from('initiative_submissions').select('*').order('created_at', { ascending: false });
       if (filter.familyId) q = q.eq('family_id', filter.familyId);

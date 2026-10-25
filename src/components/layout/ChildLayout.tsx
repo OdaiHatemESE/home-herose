@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Award, Gift, House, Lightbulb, ListChecks, LogOut, MessageCircleHeart, Sprout, Star, UserRound } from 'lucide-react';
 import { useAuth, useChildIdentity } from '@/auth/AuthProvider';
@@ -8,12 +8,14 @@ import { ChildAvatar } from '@/components/brand/misc';
 import { TrophyMark } from '@/components/brand/Logo';
 import { LanguageToggle, ThemeToggle } from './Toggles';
 import { PageLoader } from './FullPageLoader';
+import { ErrorBoundary } from './ErrorBoundary';
 
 export function ChildLayout() {
   const { t } = useTranslation();
   const { child } = useChildIdentity();
   const { signOut } = useAuth();
   const simple = child.ui_mode === 'simple';
+  const loc = useLocation();
 
   const items = [
     { to: '/child', label: t('nav.childHome'), icon: House, end: true },
@@ -68,7 +70,9 @@ export function ChildLayout() {
 
       <main id="main" className="mx-auto max-w-3xl px-4 pt-5 pb-28 sm:pb-12">
         <React.Suspense fallback={<PageLoader />}>
-          <Outlet />
+          <ErrorBoundary resetKey={loc.pathname}>
+            <Outlet />
+          </ErrorBoundary>
         </React.Suspense>
       </main>
 

@@ -6,10 +6,11 @@ import { ThemeProvider, useTheme } from '@/lib/theme';
 import { AuthProvider } from '@/auth/AuthProvider';
 import { ConfirmProvider } from '@/components/ui/confirm';
 import { AppRouter } from './router';
+import { ErrorBoundary } from '@/components/layout/ErrorBoundary';
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: true },
+    queries: { staleTime: 10_000, retry: 1, refetchOnWindowFocus: true },
     mutations: { retry: 0 },
   },
 });
@@ -22,7 +23,9 @@ function Shell() {
     <Direction.Provider dir={dir}>
       <ConfirmProvider>
         <AuthProvider>
-          <AppRouter />
+          <ErrorBoundary>
+            <AppRouter />
+          </ErrorBoundary>
         </AuthProvider>
       </ConfirmProvider>
       <Toaster position="top-center" dir={dir} theme={theme} richColors closeButton toastOptions={{ style: { fontFamily: 'var(--font-sans)' } }} />

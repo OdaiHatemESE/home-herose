@@ -100,7 +100,7 @@ export default function Approvals() {
       <section className="mt-10" aria-labelledby="recent">
         <h2 id="recent" className="mb-3 text-lg font-semibold">{t('approvals.recent')}</h2>
         <RecentApproved
-          rows={(recent.data ?? []).filter((s) => !childFilter || s.child_id === childFilter)}
+          rows={(recent.data ?? []).filter((s) => (!childFilter || s.child_id === childFilter) && !taskMap.get(s.task_id)?.is_religious)}
           renderChild={(id) => <ChildName child={childMap.get(id)} />}
           titleOf={(id) => {
             const task = taskMap.get(id);

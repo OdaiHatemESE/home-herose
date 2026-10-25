@@ -43,10 +43,13 @@ export function monthRange(iso: string): { from: string; to: string } {
 }
 
 export function formatDate(iso: string, locale: string, opts: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' }) {
-  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-AE' : 'en-GB', { ...opts, timeZone: 'UTC' }).format(parseISODate(iso));
+  const d = parseISODate(String(iso ?? '').slice(0, 10));
+  if (Number.isNaN(d.getTime())) return '—';
+  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-AE' : 'en-GB', { ...opts, timeZone: 'UTC' }).format(d);
 }
 
 export function formatDateTime(ts: string, locale: string, timeZone: string) {
+  if (!ts || Number.isNaN(new Date(ts).getTime())) return '—';
   return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-AE' : 'en-GB', {
     dateStyle: 'medium',
     timeStyle: 'short',

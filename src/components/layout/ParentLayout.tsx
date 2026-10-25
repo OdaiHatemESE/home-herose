@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { formatNumber } from '@/lib/dates';
 import { LanguageToggle, ThemeToggle } from './Toggles';
 import { PageLoader } from './FullPageLoader';
+import { ErrorBoundary } from './ErrorBoundary';
 
 type Item = { to: string; label: string; icon: React.ElementType; badge?: number; end?: boolean };
 
@@ -166,7 +167,9 @@ export function ParentLayout() {
       <main id="main" className="min-w-0 px-4 pt-5 pb-28 sm:px-6 lg:px-10 lg:pt-8 lg:pb-12">
         <div className="mx-auto max-w-6xl">
           <React.Suspense fallback={<PageLoader />}>
+            <ErrorBoundary resetKey={loc.pathname}>
             <Outlet />
+          </ErrorBoundary>
           </React.Suspense>
         </div>
       </main>

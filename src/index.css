@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: 'Readex Pro', ui-sans-serif, system-ui, 'Segoe UI', Tahoma, sans-serif;
+  --font-sans: 'Readex Pro Variable', 'Readex Pro', ui-sans-serif, system-ui, 'Segoe UI', Tahoma, sans-serif;
   --font-display: 'Lalezar', 'Readex Pro', ui-sans-serif, system-ui, sans-serif;
 
   --color-ink: #241b3d;

@@ -38,13 +38,7 @@ export default defineConfig(({ mode }) => {
           // never cache Supabase API responses: family data must always be fresh and private
           navigateFallback: 'index.html',
           globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
-          runtimeCaching: [
-            {
-              urlPattern: ({ url }) => url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com',
-              handler: 'StaleWhileRevalidate',
-              options: { cacheName: 'google-fonts' },
-            },
-          ],
+          // fonts are self-hosted: the app makes no third-party requests
         },
       }),
     ],
