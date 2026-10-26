@@ -153,7 +153,7 @@ export default function Reports() {
             </>
           )}
         </div>
-        {children.data && <ChildChips children={children.data.filter((c) => c.is_active)} value={childFilter} onChange={setChildFilter} />}
+        {children.data && <ChildChips kids={children.data.filter((c) => c.is_active)} value={childFilter} onChange={setChildFilter} />}
       </div>
       <p className="mb-4 text-sm text-muted">{formatDate(range.from, lang, { day: 'numeric', month: 'long' })} — {formatDate(range.to, lang, { day: 'numeric', month: 'long', year: 'numeric' })}</p>
 

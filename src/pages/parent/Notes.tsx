@@ -101,7 +101,7 @@ export default function Notes() {
         </TabsList>
         <TabsContent value="notes">
           <div className="mb-4 flex flex-wrap items-center gap-3">
-            {children.data && <ChildChips children={children.data} value={childFilter} onChange={setChildFilter} />}
+            {children.data && <ChildChips kids={children.data} value={childFilter} onChange={setChildFilter} />}
             <Select aria-label={t('notes.kind')} className="w-52" value={kindFilter} onChange={(e) => setKindFilter(e.target.value as NoteKind | '')}>
               <option value="">{t('common.all')}</option>
               {KINDS.map((k) => <option key={k} value={k}>{t(`notes.kinds.${k}`)}</option>)}

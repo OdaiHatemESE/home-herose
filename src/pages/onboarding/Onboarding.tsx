@@ -353,13 +353,13 @@ export default function Onboarding() {
         ) : step === 2 ? (
           <div className="grid gap-4">
             <p className="text-muted">{t('onboarding.tasksHint')}</p>
-            <label className="flex items-start gap-3 rounded-[var(--radius-card)] bg-surface-2 p-4">
-              <Checkbox checked={starterTasks} onCheckedChange={(v) => setStarterTasks(v === true)} className="mt-1" />
+            <div className="flex items-start gap-3 rounded-[var(--radius-card)] bg-surface-2 p-4">
+              <Checkbox id="starter-tasks" checked={starterTasks} onCheckedChange={(v) => setStarterTasks(v === true)} className="mt-1" />
               <span>
-                <span className="font-medium">{t('onboarding.defaultTasks')}</span>
+                <label htmlFor="starter-tasks" className="font-medium">{t('onboarding.defaultTasks')}</label>
                 <span className="mt-1 block text-sm text-muted">{t('onboarding.defaultTaskList')}</span>
               </span>
-            </label>
+            </div>
           </div>
         ) : step === 3 ? (
           <div className="grid gap-5">

@@ -20,7 +20,7 @@ export function percentOf(approved: number, max: number): number | null {
 }
 
 /** Highest active level whose threshold is met (same rule as private.level_for). */
-export function levelFor(percent: number | null, levels: Pick<AchievementLevel, 'min_percent' | 'rank' | 'is_active'>[]) {
+export function levelFor<T extends Pick<AchievementLevel, 'min_percent' | 'rank' | 'is_active'>>(percent: number | null, levels: T[]): T | null {
   const p = percent ?? 0;
   return (
     [...levels]

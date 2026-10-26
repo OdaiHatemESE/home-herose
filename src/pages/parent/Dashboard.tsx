@@ -81,7 +81,7 @@ export default function ParentDashboard() {
 
       {children.data && children.data.length > 1 && (
         <div className="mb-5">
-          <ChildChips children={children.data} value={childFilter} onChange={setChildFilter} />
+          <ChildChips kids={children.data} value={childFilter} onChange={setChildFilter} />
         </div>
       )}
 

@@ -65,7 +65,7 @@ export default function Rewards() {
         </TabsList>
         <TabsContent value="ledger">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            {children.data && <ChildChips children={children.data} value={childFilter} onChange={setChildFilter} />}
+            {children.data && <ChildChips kids={children.data} value={childFilter} onChange={setChildFilter} />}
             <span className="inline-flex items-center gap-2 rounded-full bg-gold-100 px-4 py-1.5 text-sm font-medium text-gold-800 dark:bg-gold-400/15 dark:text-gold-300">
               <HandCoins className="size-4" /> {t('rewards.unpaidTotal')}: {formatMoney(unpaid, family.currency, lang)}
             </span>
@@ -205,7 +205,7 @@ function GrantDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o: 
             );
           }}
         >
-          <Field label={t('common.child')} htmlFor="gr-child"><ChildSelect id="gr-child" children={children.data ?? []} value={childId} onChange={setChildId} /></Field>
+          <Field label={t('common.child')} htmlFor="gr-child"><ChildSelect id="gr-child" kids={children.data ?? []} value={childId} onChange={setChildId} /></Field>
           <Field label={t('rewards.catalog')} htmlFor="gr-rew">
             <Select id="gr-rew" value={rewardId} onChange={(e) => setRewardId(e.target.value)}>
               <option value="">{t('rewards.customTitle')}</option>

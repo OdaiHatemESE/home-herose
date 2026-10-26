@@ -39,7 +39,7 @@ function readToken(req: http.IncomingMessage): Json | null {
   }
 }
 
-async function userRow(db: Db, id: string) {
+async function userRow(db: Db, id: string): Promise<any> {
   const [u] = await db.rows(`select id, email, raw_app_meta_data as app_metadata, raw_user_meta_data as user_metadata, created_at from auth.users where id = $1`, [id]);
   return u ? { ...u, aud: 'authenticated', role: 'authenticated' } : null;
 }

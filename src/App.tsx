@@ -7,6 +7,7 @@ import { AuthProvider } from '@/auth/AuthProvider';
 import { ConfirmProvider } from '@/components/ui/confirm';
 import { AppRouter } from './router';
 import { ErrorBoundary } from '@/components/layout/ErrorBoundary';
+import { DemoBanner } from '@/components/layout/DemoBanner';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,6 +22,7 @@ function Shell() {
   const dir = i18n.dir(i18n.language);
   return (
     <Direction.Provider dir={dir}>
+      <DemoBanner />
       <ConfirmProvider>
         <AuthProvider>
           <ErrorBoundary>

@@ -49,7 +49,7 @@ export default function WeeklySheet() {
       landscape
       controls={
         <>
-          <ChildSelect id="ws-child" allowAll children={children.data ?? []} value={childParam} onChange={(v) => setParams({ week, ...(v ? { child: v } : {}) })} className="w-44" />
+          <ChildSelect id="ws-child" allowAll kids={children.data ?? []} value={childParam} onChange={(v) => setParams({ week, ...(v ? { child: v } : {}) })} className="w-44" />
           <Input type="date" aria-label={t('print.selectWeek')} value={week} onChange={(e) => setParams({ week: e.target.value, ...(childParam ? { child: childParam } : {}) })} className="w-44" />
         </>
       }

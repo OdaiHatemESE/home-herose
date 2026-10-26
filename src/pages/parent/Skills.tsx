@@ -92,7 +92,7 @@ export default function Skills() {
                   </span>
                 </th>
               ))}
-              <th className="w-24" />
+              <th className="w-24"><span className="sr-only">{t('common.actions')}</span></th>
             </tr>
           </thead>
           <tbody>
@@ -137,7 +137,7 @@ export default function Skills() {
       <Card>
         <CardHeader>
           <CardTitle>{t('skills.history')}</CardTitle>
-          <ChildSelect id="sk-hist" children={children.data ?? []} value={chosen} onChange={setHistoryChild} className="w-44" />
+          <ChildSelect id="sk-hist" kids={children.data ?? []} value={chosen} onChange={setHistoryChild} className="w-44" />
         </CardHeader>
         <CardContent>
           {chartData.length === 0 ? (

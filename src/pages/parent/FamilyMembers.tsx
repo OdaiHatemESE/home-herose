@@ -254,11 +254,11 @@ function ChildDialog({ target, onClose, familyId, takenUsernames, onSaved }: {
 
   if (!form) return null;
   const set = (p: Partial<ChildForm>) => setForm({ ...form, ...p });
-  const birthYear = form.age ? new Date().getFullYear() - Number(form.age) : null;
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    const birthYear = form.age ? new Date().getFullYear() - Number(form.age) : null;
     if (isNew) {
       const sp = secretProblem(form.secret);
       if (sp) return setError(t(`errors.${sp}`));

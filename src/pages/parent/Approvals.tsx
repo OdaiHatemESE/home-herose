@@ -67,7 +67,7 @@ export default function Approvals() {
       />
       {children.data && children.data.length > 1 && (
         <div className="mb-5">
-          <ChildChips children={children.data.filter((c) => c.is_active)} value={childFilter} onChange={setChildFilter} />
+          <ChildChips kids={children.data.filter((c) => c.is_active)} value={childFilter} onChange={setChildFilter} />
         </div>
       )}
 

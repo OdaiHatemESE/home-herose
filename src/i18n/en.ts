@@ -795,6 +795,7 @@ const en: Dictionary = {
     p5: 'Parents can download a full copy of the data, set retention periods and delete the family at any time.',
     p6: '“Parents only” notes never reach a child’s account.',
   },
+  demo: { banner: 'Local demo mode — sample data is reset on restart' },
   notFound: { title: 'Page not found', back: 'Back to home' },
 };
 

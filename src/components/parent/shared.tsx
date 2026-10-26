@@ -9,9 +9,9 @@ export function useChildMap(children: Child[] | undefined) {
   return React.useMemo(() => new Map((children ?? []).map((c) => [c.id, c])), [children]);
 }
 
-export function ChildSelect({ id, children, value, onChange, allowAll, className }: {
+export function ChildSelect({ id, kids, value, onChange, allowAll, className }: {
   id: string;
-  children: Child[];
+  kids: Child[];
   value: string;
   onChange: (v: string) => void;
   allowAll?: boolean;
@@ -21,7 +21,7 @@ export function ChildSelect({ id, children, value, onChange, allowAll, className
   return (
     <Select id={id} value={value} onChange={(e) => onChange(e.target.value)} className={className}>
       {allowAll && <option value="">{t('common.all')}</option>}
-      {children.map((c) => (
+      {kids.map((c) => (
         <option key={c.id} value={c.id}>
           {c.display_name}
         </option>
@@ -31,7 +31,7 @@ export function ChildSelect({ id, children, value, onChange, allowAll, className
 }
 
 /** Horizontal chip filter of children (avatars), with an "all" chip. */
-export function ChildChips({ children, value, onChange }: { children: Child[]; value: string; onChange: (v: string) => void }) {
+export function ChildChips({ kids, value, onChange }: { kids: Child[]; value: string; onChange: (v: string) => void }) {
   const { t } = useTranslation();
   return (
     <div role="radiogroup" aria-label={t('tasks.filterChild')} className="flex flex-wrap gap-1.5">
@@ -44,7 +44,7 @@ export function ChildChips({ children, value, onChange }: { children: Child[]; v
       >
         {t('common.all')}
       </button>
-      {children.map((c) => (
+      {kids.map((c) => (
         <button
           key={c.id}
           type="button"

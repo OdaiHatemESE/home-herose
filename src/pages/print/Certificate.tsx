@@ -29,7 +29,7 @@ export default function Certificate() {
       landscape
       controls={
         <>
-          <ChildSelect id="ct-child" children={children.data ?? []} value={childId} onChange={(v) => setParams({ child: v })} className="w-44" />
+          <ChildSelect id="ct-child" kids={children.data ?? []} value={childId} onChange={(v) => setParams({ child: v })} className="w-44" />
           <Select aria-label={t('print.selectWeek')} value={snap?.week_start ?? ''} onChange={(e) => setParams({ child: childId, week: e.target.value })} className="w-56">
             <option value="">{t('print.certificateGeneric').slice(0, 30)}…</option>
             {(snapshots.data ?? []).map((s) => (

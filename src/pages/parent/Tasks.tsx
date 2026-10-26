@@ -66,7 +66,7 @@ export default function Tasks() {
         </TabsList>
         <TabsContent value="tasks">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-            {children.data && <ChildChips children={children.data} value={childFilter} onChange={setChildFilter} />}
+            {children.data && <ChildChips kids={children.data} value={childFilter} onChange={setChildFilter} />}
             <label className="flex items-center gap-2 text-sm">
               <Switch checked={showArchived} onCheckedChange={setShowArchived} /> {t('tasks.showArchived')}
             </label>
@@ -149,7 +149,7 @@ export default function Tasks() {
         onOpenChange={(o) => !o && setEditing(null)}
         task={editing === 'new' ? null : editing}
         familyId={familyId}
-        children={children.data ?? []}
+        kids={children.data ?? []}
         categories={categories.data ?? []}
         today={today}
         defaults={defaults}

@@ -74,12 +74,12 @@ function fromTask(task: TaskWithMeta | null, today: string, defaults: { base: nu
   };
 }
 
-export function TaskFormDialog({ open, onOpenChange, task, familyId, children, categories, today, defaults }: {
+export function TaskFormDialog({ open, onOpenChange, task, familyId, kids, categories, today, defaults }: {
   open: boolean;
   onOpenChange: (o: boolean) => void;
   task: TaskWithMeta | null;
   familyId: string;
-  children: Child[];
+  kids: Child[];
   categories: TaskCategory[];
   today: string;
   defaults: { base: number; bonus: number };
@@ -184,7 +184,7 @@ export function TaskFormDialog({ open, onOpenChange, task, familyId, children, c
             <div className="grid gap-1.5 sm:col-span-2">
               <span className="text-sm font-medium">{t('tasks.assignees')}</span>
               <div className="flex flex-wrap gap-2">
-                {children.map((c) => {
+                {kids.map((c) => {
                   const checked = f.childIds.includes(c.id);
                   return (
                     <label key={c.id} className={cn('inline-flex cursor-pointer items-center gap-2 rounded-full border py-1 ps-1 pe-3 text-sm', checked ? 'border-plum-500 bg-plum-50 dark:bg-plum-500/15' : 'border-app')}>

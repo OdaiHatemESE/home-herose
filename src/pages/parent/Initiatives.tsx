@@ -78,7 +78,7 @@ export default function ParentInitiatives() {
           </ul>
         </TabsContent>
       </Tabs>
-      <RecordInitiativeDialog open={recordOpen} onOpenChange={setRecordOpen} children={children.data ?? []} today={today} />
+      <RecordInitiativeDialog open={recordOpen} onOpenChange={setRecordOpen} kids={children.data ?? []} today={today} />
     </>
   );
 }
@@ -118,7 +118,7 @@ function InitiativeReview({ item, childName, defaultPoints }: { item: Initiative
   );
 }
 
-function RecordInitiativeDialog({ open, onOpenChange, children, today }: { open: boolean; onOpenChange: (o: boolean) => void; children: import('@/lib/database.types').Child[]; today: string }) {
+function RecordInitiativeDialog({ open, onOpenChange, kids, today }: { open: boolean; onOpenChange: (o: boolean) => void; kids: import('@/lib/database.types').Child[]; today: string }) {
   const { t } = useTranslation();
   const [childId, setChildId] = React.useState('');
   const [title, setTitle] = React.useState('');
@@ -127,12 +127,12 @@ function RecordInitiativeDialog({ open, onOpenChange, children, today }: { open:
   const submit = useAction(initiativeApi.submit);
   React.useEffect(() => {
     if (open) {
-      setChildId(children[0]?.id ?? '');
+      setChildId(kids[0]?.id ?? '');
       setTitle('');
       setDescription('');
       setDate(today);
     }
-  }, [open, children, today]);
+  }, [open, kids, today]);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent title={t('initiatives.record')} description={t('initiatives.examples')}>
@@ -144,7 +144,7 @@ function RecordInitiativeDialog({ open, onOpenChange, children, today }: { open:
           }}
         >
           <Field label={t('common.child')} htmlFor="ri-child">
-            <ChildSelect id="ri-child" children={children} value={childId} onChange={setChildId} />
+            <ChildSelect id="ri-child" kids={kids} value={childId} onChange={setChildId} />
           </Field>
           <Field label={t('initiatives.whatDid')} htmlFor="ri-title">
             <Input id="ri-title" value={title} onChange={(e) => setTitle(e.target.value)} required minLength={2} />

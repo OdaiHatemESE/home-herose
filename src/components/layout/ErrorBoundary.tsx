@@ -3,15 +3,19 @@ import i18n from '@/i18n';
 import { TrophyMark } from '@/components/brand/Logo';
 
 /** Keeps a single failing screen from blanking the whole app. */
-export class ErrorBoundary extends React.Component<{ children: React.ReactNode; resetKey?: string }, { error: Error | null }> {
-  state = { error: null as Error | null };
+type Props = { children: React.ReactNode; resetKey?: string };
+type State = { error: Error | null; key?: string };
 
-  static getDerivedStateFromError(error: Error) {
+export class ErrorBoundary extends React.Component<Props, State> {
+  state: State = { error: null, key: this.props.resetKey };
+
+  static getDerivedStateFromError(error: Error): Partial<State> {
     return { error };
   }
 
-  componentDidUpdate(prev: { resetKey?: string }) {
-    if (prev.resetKey !== this.props.resetKey && this.state.error) this.setState({ error: null });
+  // navigating to another screen clears a previous failure
+  static getDerivedStateFromProps(props: Props, state: State): Partial<State> | null {
+    return props.resetKey !== state.key ? { error: null, key: props.resetKey } : null;
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {

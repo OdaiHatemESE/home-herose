@@ -141,7 +141,7 @@ export default function Schedule() {
               );
             }}
           >
-            <Field label={t('common.child')} htmlFor="ex-child"><ChildSelect id="ex-child" children={children.data ?? []} value={ex.child} onChange={(v) => setEx({ ...ex, child: v })} /></Field>
+            <Field label={t('common.child')} htmlFor="ex-child"><ChildSelect id="ex-child" kids={children.data ?? []} value={ex.child} onChange={(v) => setEx({ ...ex, child: v })} /></Field>
             <Field label={t('tasks.title')} htmlFor="ex-task">
               <Select id="ex-task" value={ex.task} onChange={(e) => setEx({ ...ex, task: e.target.value })}>
                 <option value="">{t('schedule.wholeDay')}</option>
