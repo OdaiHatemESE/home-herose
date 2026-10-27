@@ -6,7 +6,7 @@ import { AuthLayout } from '@/components/shell';
 import { Btn, CheckBox, ErrorState, Field, Input, PasswordInput, T } from '@/components/ui';
 import { errorMessage } from '@/lib/errors';
 import { getPref, setPref } from '@/lib/prefs';
-import { useTheme } from '@/lib/theme';
+import { F, useTheme } from '@/lib/theme';
 
 export default function ChildLogin() {
   const { t } = useTranslation();
@@ -61,7 +61,7 @@ export default function ChildLogin() {
             autoCapitalize="characters"
             autoCorrect={false}
             autoComplete="off"
-            style={{ letterSpacing: 6, fontWeight: '600' }}
+            style={{ letterSpacing: 6, fontFamily: F.semibold }}
             invalid={!!errors.familyCode}
           />
         </Field>

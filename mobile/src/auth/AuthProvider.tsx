@@ -3,7 +3,7 @@ import type { Session } from '@supabase/supabase-js';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { invokeFunction, supabase } from '@/lib/supabase';
 import type { Child, Family, FamilyMember, FamilySettings, Profile } from '@/lib/database.types';
-import { todayIn } from '@shared/lib/dates';
+import { todayIn } from '@/lib/today';
 
 export type Identity =
   | { kind: 'none' }
