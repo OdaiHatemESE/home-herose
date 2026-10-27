@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex" />
+<title>أبطال البيت</title>
+<script>
+  // GitHub Pages serves this page for any path it has no file for.
+  //  - links into the phone/tablet app (…/app/…) go back to the app, which opens the requested page
+  //  - anything else goes to the website (it uses #/ routes, so a path never needs a file)
+  (function () {
+    var base = '__BASE__';
+    var app = base + 'app';
+    var p = location.pathname;
+    if (p.indexOf(app + '/') === 0) {
+      var rest = p.slice(app.length) + location.search + location.hash;
+      location.replace(app + '/?redirect=' + encodeURIComponent(rest));
+    } else {
+      location.replace(base + (location.hash || ''));
+    }
+  })();
+</script>
+</head>
+<body></body>
+</html>

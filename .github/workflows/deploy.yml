@@ -1,7 +1,10 @@
 # CI + GitHub Pages deployment for Home Heroes (أبطال البيت)
 #
-#  - Every push / pull request: typecheck, lint, unit + database tests, Edge Function checks, E2E.
-#  - Push to main (or manual run): build the static site and publish it to GitHub Pages.
+#  - Every push / pull request: typecheck, lint, unit + database tests, Edge Function checks, E2E,
+#    plus typecheck + lint of the phone/tablet app (mobile/, Expo).
+#  - Push to main (or manual run): build the website and the app's web preview, publish both to GitHub Pages:
+#      https://<user>.github.io/<repo>/       → website
+#      https://<user>.github.io/<repo>/app/   → phone/tablet app (test link before native builds)
 #
 # Repository settings required once:
 #   Settings → Pages → Source: "GitHub Actions"
@@ -82,10 +85,30 @@ jobs:
             test-results
           retention-days: 7
 
+  mobile:
+    name: App (Expo) — typecheck · lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - run: npm ci
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Lint
+        run: npx expo lint
+
   build:
     name: Production build
     runs-on: ubuntu-latest
-    needs: [verify, e2e]
+    needs: [verify, e2e, mobile]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     timeout-minutes: 15
     env:
@@ -94,13 +117,19 @@ jobs:
       PAGES_CUSTOM_DOMAIN: ${{ vars.PAGES_CUSTOM_DOMAIN }}
       CONFIGURED_BASE: ${{ vars.VITE_BASE_PATH }}
       REPO_NAME: ${{ github.event.repository.name }}
+      OWNER: ${{ github.repository_owner }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            mobile/package-lock.json
       - run: npm ci
+      - run: npm ci
+        working-directory: mobile
 
       - name: Resolve base path & check public configuration
         run: |
@@ -114,7 +143,10 @@ jobs:
             base="/$REPO_NAME/"
           fi
           echo "VITE_BASE_PATH=$base" >> "$GITHUB_ENV"
-          echo "Base path: $base"
+          echo "EXPO_BASE_URL=${base}app" >> "$GITHUB_ENV"
+          if [ -n "$PAGES_CUSTOM_DOMAIN" ]; then site="https://$PAGES_CUSTOM_DOMAIN$base"; else site="https://${OWNER,,}.github.io$base"; fi
+          echo "EXPO_PUBLIC_WEBSITE_URL=$site" >> "$GITHUB_ENV"
+          echo "Base path: $base — website: $site — app: ${site}app/"
 
           if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_PUBLISHABLE_KEY" ]; then
             echo "::warning::VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY are not set. The site will deploy but show the 'setup required' screen."
@@ -130,12 +162,20 @@ jobs:
             echo "::error::VITE_SUPABASE_PUBLISHABLE_KEY is a service_role key. Use the anon/publishable key." && exit 1
           fi
 
-      - name: Build
+      - name: Build website
         run: npm run build
 
-      - name: Pages extras (SPA fallback, CNAME, no Jekyll)
+      - name: Build app web preview (Expo) into /app
+        working-directory: mobile
+        env:
+          EXPO_PUBLIC_SUPABASE_URL: ${{ env.VITE_SUPABASE_URL }}
+          EXPO_PUBLIC_SUPABASE_KEY: ${{ env.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: npx expo export --platform web --output-dir ../dist/app
+
+      - name: Pages extras (deep-link fallback, CNAME, no Jekyll)
         run: |
-          cp dist/index.html dist/404.html
+          # unknown paths: /app/… goes back into the app, anything else to the website (#/ routes)
+          sed "s#__BASE__#$VITE_BASE_PATH#" mobile/web/404.template.html > dist/404.html
           touch dist/.nojekyll
           if [ -n "$PAGES_CUSTOM_DOMAIN" ]; then echo "$PAGES_CUSTOM_DOMAIN" > dist/CNAME; fi
 

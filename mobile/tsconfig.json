@@ -1,0 +1,12 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@shared/*": ["../src/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "../src/lib/database.types.ts", "../src/lib/dates.ts", "../src/lib/scoring.ts", "../src/i18n/ar.ts", "../src/i18n/en.ts"],
+  "exclude": ["node_modules", "dist"]
+}

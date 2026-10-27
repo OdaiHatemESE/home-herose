@@ -37,6 +37,8 @@ export default defineConfig(({ mode }) => {
         workbox: {
           // never cache Supabase API responses: family data must always be fresh and private
           navigateFallback: 'index.html',
+          // the phone/tablet app lives at <base>app/ — never answer its pages with the website
+          navigateFallbackDenylist: [/\/app(\/|$)/],
           globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
           // fonts are self-hosted: the app makes no third-party requests
         },

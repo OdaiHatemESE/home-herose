@@ -25,6 +25,12 @@ Arabic (RTL) is the default; English is built in.
 
 ---
 
+## Phone & tablet app
+
+The Expo app in [`mobile/`](mobile/README.md) uses the same backend and business rules as the
+website. Its web preview is published with the website at `https://<user>.github.io/<repo>/app/`,
+where it can be tested before native Android/iOS builds are made.
+
 ## Contents
 
 - [Features](#features)
