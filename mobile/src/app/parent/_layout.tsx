@@ -18,7 +18,9 @@ import StickyNote from 'lucide-react-native/icons/sticky-note';
 import Trophy from 'lucide-react-native/icons/trophy';
 import Users from 'lucide-react-native/icons/users';
 import { useAuth, useParent } from '@/auth/AuthProvider';
-import { AccountFooter, AppFrame, type NavGroup } from '@/components/nav';
+import { AppFrame, type NavGroup } from '@/components/nav';
+import { T } from '@/components/ui';
+import { brand } from '@/lib/theme';
 import { getPref } from '@/lib/prefs';
 import { supabase } from '@/lib/supabase';
 
@@ -57,13 +59,13 @@ export default function ParentLayout() {
         { href: '/parent', label: t('nav.dashboard'), icon: House, exact: true },
         { href: '/parent/approvals', label: t('nav.approvals'), icon: ClipboardCheck, badge: counts?.submissions },
         { href: '/parent/initiatives', label: t('nav.initiatives'), icon: Lightbulb, badge: counts?.initiatives },
-        { href: '/parent/week', label: t('nav.week'), icon: Trophy },
+        { href: '/parent/week', label: t('nav.week'), short: t('mobile.weekShort'), icon: Trophy },
       ],
     },
     {
       label: t('nav.groupSetup'),
       items: [
-        { href: '/parent/family', label: t('nav.family'), icon: Users },
+        { href: '/parent/family', label: t('nav.family'), short: t('mobile.familyShort'), icon: Users },
         { href: '/parent/tasks', label: t('nav.tasks'), icon: ListChecks },
         { href: '/parent/schedule', label: t('nav.schedule'), icon: CalendarDays },
         { href: '/parent/scoring', label: t('nav.scoring'), icon: Scale },
@@ -82,13 +84,24 @@ export default function ParentLayout() {
       ],
     },
   ];
-  const tabs = [groups[0].items[0], groups[0].items[1], groups[1].items[1], groups[0].items[3]];
+  // bottom bar (phone) shows the first four; the rail (tablet) shows all six; the rest is under «More»
+  const primary = [...groups[0].items, groups[1].items[0], groups[1].items[1]];
+  const name = profile?.display_name ?? membership.display_name ?? '';
 
   return (
     <AppFrame
       groups={groups}
-      tabs={tabs}
-      footer={<AccountFooter name={profile?.display_name ?? membership.display_name ?? ''} sub={family.name} onSignOut={() => void signOut()} />}
+      primary={primary}
+      account={{
+        name,
+        sub: family.name,
+        onSignOut: () => void signOut(),
+        emblem: (
+          <T size={17} w="bold" color={brand.plum600} align="center">
+            {(name.trim()[0] ?? '★').toUpperCase()}
+          </T>
+        ),
+      }}
     >
       <Slot />
     </AppFrame>

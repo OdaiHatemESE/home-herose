@@ -8,6 +8,13 @@ export const mobileAr = {
   welcomeKids: 'للأبطال',
   testBuild: 'نسخة تجريبية من التطبيق',
   pullToRefresh: 'اسحب للتحديث',
+  weekShort: 'الأسبوع',
+  familyShort: 'العائلة',
+  kids: 'الأبطال',
+  today: 'اليوم',
+  thisWeek: 'هذا الأسبوع',
+  tasksDone: 'مهام منجزة',
+  stars: 'نجوم',
 };
 
 export const mobileEn: typeof mobileAr = {
@@ -19,4 +26,11 @@ export const mobileEn: typeof mobileAr = {
   welcomeKids: 'For heroes',
   testBuild: 'App test build',
   pullToRefresh: 'Pull to refresh',
+  weekShort: 'Week',
+  familyShort: 'Family',
+  kids: 'Heroes',
+  today: 'Today',
+  thisWeek: 'This week',
+  tasksDone: 'tasks done',
+  stars: 'stars',
 };

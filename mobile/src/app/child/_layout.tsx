@@ -10,9 +10,9 @@ import Sprout from 'lucide-react-native/icons/sprout';
 import Star from 'lucide-react-native/icons/star';
 import UserRound from 'lucide-react-native/icons/user-round';
 import { useAuth, useChildIdentity } from '@/auth/AuthProvider';
-import { ChildAvatar } from '@/components/brand';
-import { AccountFooter, AppFrame, type NavItem } from '@/components/nav';
-import { Row, T } from '@/components/ui';
+import { AppFrame, type NavItem } from '@/components/nav';
+import { avatarEmoji } from '@/lib/icons';
+import { Text } from 'react-native';
 
 export default function ChildLayout() {
   const { t } = useTranslation();
@@ -31,21 +31,15 @@ export default function ChildLayout() {
     { href: '/child/feedback', label: t('nav.feedback'), icon: MessageCircleHeart },
     { href: '/child/profile', label: t('nav.profile'), icon: UserRound },
   ];
-  // the youngest heroes get four big tabs only (same as the website)
-  const tabs = simple ? [items[0], items[2], items[3], items[4]] : [items[0], items[1], items[2], items[3], items[4]];
+  // the youngest heroes get four big destinations only (same as the website)
+  const primary = simple ? [items[0], items[2], items[3], items[4]] : [items[0], items[1], items[2], items[3], items[4]];
 
   return (
     <AppFrame
-      groups={[{ label: '', items: simple ? tabs : items }]}
-      tabs={tabs}
-      simpleTabs={simple}
-      header={
-        <Row gap={10}>
-          <ChildAvatar avatar={child.avatar} color={child.color} size="sm" />
-          <T w="semibold">{child.display_name}</T>
-        </Row>
-      }
-      footer={<AccountFooter name={child.display_name} sub={family.name} onSignOut={() => void signOut()} />}
+      groups={[{ label: '', items: simple ? primary : items }]}
+      primary={primary}
+      simple={simple}
+      account={{ name: child.display_name, sub: family.name, onSignOut: () => void signOut(), emblem: <Text style={{ fontSize: 22 }}>{avatarEmoji(child.avatar)}</Text> }}
     >
       <Slot />
     </AppFrame>

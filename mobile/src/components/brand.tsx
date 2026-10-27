@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import Star from 'lucide-react-native/icons/star';
 import type { AchievementLevel } from '@shared/lib/database.types';
-import { formatNumber } from '@shared/lib/dates';
+import { formatNumber } from '@/lib/dates';
 import { useDir } from '@/i18n';
 import { avatarEmoji, colorStyle } from '@/lib/icons';
 import { brand, useTheme } from '@/lib/theme';
@@ -126,7 +126,7 @@ export function LevelBadge({ level, size = 'md' }: { level: LevelLike | null | u
     >
       <Row gap={6}>
         <Text style={{ fontSize: fs }}>{level.icon}</Text>
-        <T size={fs} display={size === 'lg'} w={size === 'lg' ? 'regular' : 'semibold'} color={tone.fg}>
+        <T size={fs} display={size === 'lg'} w={size === 'lg' ? 'regular' : 'semibold'} color={tone.fg} numberOfLines={1}>
           {levelName(level, i18n.language)}
         </T>
       </Row>
@@ -185,7 +185,7 @@ export function MedalTrack({
       style={[{ height: barTop + barH + medal + 18, marginVertical: 2 }, style]}
     >
       {/* ribbon */}
-      <View style={{ position: 'absolute', top: barTop, left: 0, right: 0, height: barH, borderRadius: 999, backgroundColor: c.dark ? brand.plum900 : brand.plum100, overflow: 'hidden' }}>
+      <View style={{ position: 'absolute', top: barTop, left: 0, right: 0, height: barH, borderRadius: 999, backgroundColor: c.dark ? 'rgba(154,118,240,0.22)' : brand.plum100, overflow: 'hidden' }}>
         <Animated.View style={{ position: 'absolute', top: 0, bottom: 0, [dir.rtl ? 'right' : 'left']: 0, width: fillWidth, borderRadius: 999, overflow: 'hidden' }}>
           <LinearGradient colors={[brand.plum500, brand.rose500, brand.gold400]} locations={[0, 0.6, 1]} start={{ x: dir.rtl ? 1 : 0, y: 0 }} end={{ x: dir.rtl ? 0 : 1, y: 0 }} style={{ flex: 1 }} />
         </Animated.View>
@@ -209,15 +209,15 @@ export function MedalTrack({
             <View key={l.id} style={{ position: 'absolute', top: barTop - (medal - barH) / 2, left: x - medal / 2, width: medal, alignItems: 'center' }}>
               <View
                 accessibilityLabel={i18n.language === 'ar' ? l.name_ar : l.name_en || l.name_ar}
-                style={{ width: medal, height: medal, borderRadius: medal / 2, borderWidth: 2, borderColor: c.dark ? brand.plum950 : '#fff', overflow: 'hidden', opacity: reached ? 1 : 0.55 }}
+                style={{ width: medal, height: medal, borderRadius: medal / 2, borderWidth: 2, borderColor: c.dark ? '#2B2349' : '#fff', overflow: 'hidden', opacity: reached ? 1 : 0.8 }}
               >
                 {reached && fill ? (
                   <LinearGradient colors={[fill[0], fill[1]]} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={{ fontSize: medal * 0.48 }}>{l.icon}</Text>
                   </LinearGradient>
                 ) : (
-                  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: reached ? brand.plum500 : c.surface2 }}>
-                    <Text style={{ fontSize: medal * 0.48, opacity: reached ? 1 : 0.5 }}>{l.icon}</Text>
+                  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: reached ? brand.plum500 : c.dark ? '#3A3060' : brand.plum50 }}>
+                    <Text style={{ fontSize: medal * 0.48, opacity: reached ? 1 : 0.6 }}>{l.icon}</Text>
                   </View>
                 )}
               </View>

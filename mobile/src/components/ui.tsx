@@ -30,6 +30,9 @@ import { useLayout } from '@/lib/layout';
 
 /* ------------------------------------------------------------------ text */
 
+/** Larger system text is honoured up to +15%; beyond that, designed layouts break (e.g. words split across lines). */
+export const FONT_SCALE_CAP = 1.15;
+
 type Weight = 'regular' | 'medium' | 'semibold' | 'bold';
 
 export function T({
@@ -63,6 +66,7 @@ export function T({
   return (
     <Text
       onPress={onPress}
+      maxFontSizeMultiplier={FONT_SCALE_CAP}
       numberOfLines={numberOfLines}
       accessibilityRole={accessibilityRole}
       style={[
@@ -356,6 +360,7 @@ export const Input = React.forwardRef<TextInput, TextInputProps & { ltr?: boolea
       >
         <TextInput
           ref={ref}
+          maxFontSizeMultiplier={FONT_SCALE_CAP}
           placeholderTextColor={c.muted}
           onFocus={(e) => {
             setFocused(true);
@@ -687,12 +692,12 @@ export function Divider() {
 export function Stat({ label, value, sub }: { label: string; value: React.ReactNode; sub?: string }) {
   const { c } = useTheme();
   return (
-    <View style={{ borderRadius: R.control, backgroundColor: c.surface2, paddingHorizontal: 12, paddingVertical: 10, gap: 2, flex: 1 }}>
-      <T size={12} color={c.muted} align="center">
+    <View style={{ borderRadius: R.control, backgroundColor: c.surface2, paddingHorizontal: 8, paddingVertical: 10, gap: 2, flex: 1, minWidth: 0 }}>
+      <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} maxFontSizeMultiplier={FONT_SCALE_CAP} style={{ fontFamily: F.regular, fontSize: 12, color: c.muted, textAlign: 'center' }}>
         {label}
-      </T>
+      </Text>
       {typeof value === 'string' || typeof value === 'number' ? (
-        <T size={17} w="semibold" align="center">
+        <T size={18} w="bold" align="center" numberOfLines={1}>
           {value}
         </T>
       ) : (

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Pressable, View } from 'react-native';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { addDays, formatDate } from '@shared/lib/dates';
+import { addDays, formatDate } from '@/lib/dates';
 import { useChildDay } from '@/api/progress';
 import { useChildIdentity } from '@/auth/AuthProvider';
 import { ChildTaskRow, SimpleTaskTile } from '@/components/child';

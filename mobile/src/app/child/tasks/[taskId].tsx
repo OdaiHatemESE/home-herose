@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import ChevronLeft from 'lucide-react-native/icons/chevron-left';
 import ChevronRight from 'lucide-react-native/icons/chevron-right';
 import Star from 'lucide-react-native/icons/star';
-import { formatDate, formatNumber } from '@shared/lib/dates';
+import { formatDate, formatNumber } from '@/lib/dates';
 import { useChildDay } from '@/api/progress';
 import { useChildIdentity } from '@/auth/AuthProvider';
 import { childTaskState, useCompleteTask } from '@/components/child';

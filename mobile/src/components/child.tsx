@@ -11,7 +11,7 @@ import RotateCcw from 'lucide-react-native/icons/rotate-ccw';
 import Sparkles from 'lucide-react-native/icons/sparkles';
 import Star from 'lucide-react-native/icons/star';
 import type { CompletionMode, DayTask } from '@shared/lib/database.types';
-import { formatNumber } from '@shared/lib/dates';
+import { formatNumber } from '@/lib/dates';
 import { useAction } from '@/api/core';
 import { scoreApi } from '@/api/progress';
 import { pick, useDir } from '@/i18n';
@@ -139,9 +139,11 @@ export function ChildTaskRow({ task, date, readOnly }: { task: DayTask; date: st
       <Pressable onPress={openDetail} accessibilityRole="link" style={{ flex: 1, minWidth: 0, gap: 4 }}>
         <T w="semibold">{title}</T>
         <Row gap={8} wrap>
-          <T size={13} color={c.muted}>
-            {task.is_religious ? t('child.privateTask') : `+${formatNumber(task.base_points + task.independence_bonus, i18n.language)} ⭐`}
-          </T>
+          {s !== 'done' && (
+            <T size={13} color={c.muted}>
+              {task.is_religious ? t('child.privateTask') : `+${formatNumber(task.base_points + task.independence_bonus, i18n.language)} ⭐`}
+            </T>
+          )}
           {!!task.submission?.review_note && (
             <T size={13} color={c.muted} numberOfLines={1}>
               {`«${task.submission.review_note}»`}

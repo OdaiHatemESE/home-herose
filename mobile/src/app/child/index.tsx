@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import Award from 'lucide-react-native/icons/award';
-import { addDays, dayOfWeek, formatDate, formatNumber, weekStartFor } from '@shared/lib/dates';
+import { addDays, dayOfWeek, formatDate, formatNumber, weekStartFor } from '@/lib/dates';
 import { nextLevel } from '@shared/lib/scoring';
 import { useEarnedAchievements, useFamilyTable } from '@/api/content';
 import { useChildDay, useChildProgress } from '@/api/progress';
@@ -139,13 +139,13 @@ export default function ChildDashboard() {
             ))}
         </Grid>
       ) : (
-        <View style={{ gap: 8 }}>
+        <Grid cols={L.wide ? 1 : L.tablet ? 2 : 1} gap={10}>
           {tasks
             .filter((x) => x.recurrence !== 'occasional')
             .map((x) => (
               <ChildTaskRow key={x.task_id} task={x} date={today} readOnly={day.data?.week_finalized} />
             ))}
-        </View>
+        </Grid>
       )}
       {!simple && tasks.some((x) => x.recurrence === 'occasional') && (
         <T size={14} color={c.primaryText} onPress={() => router.navigate('/child/tasks')} accessibilityRole="link" style={{ marginTop: 8 }}>

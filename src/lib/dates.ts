@@ -1,4 +1,5 @@
 /** Date helpers. All "calendar" dates are ISO yyyy-mm-dd strings in the family's timezone. */
+// Arabic uses Western digits (as in the UAE): phones would otherwise show ٠١٢, where ٠ reads like a dot.
 
 export function todayIn(timeZone: string, now = new Date()): string {
   const parts = new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(now);
@@ -45,12 +46,12 @@ export function monthRange(iso: string): { from: string; to: string } {
 export function formatDate(iso: string, locale: string, opts: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' }) {
   const d = parseISODate(String(iso ?? '').slice(0, 10));
   if (Number.isNaN(d.getTime())) return '—';
-  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-AE' : 'en-GB', { ...opts, timeZone: 'UTC' }).format(d);
+  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-AE-u-nu-latn' : 'en-GB', { ...opts, timeZone: 'UTC' }).format(d);
 }
 
 export function formatDateTime(ts: string, locale: string, timeZone: string) {
   if (!ts || Number.isNaN(new Date(ts).getTime())) return '—';
-  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-AE' : 'en-GB', {
+  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-AE-u-nu-latn' : 'en-GB', {
     dateStyle: 'medium',
     timeStyle: 'short',
     timeZone,
@@ -64,10 +65,10 @@ export function weekdayName(dow: number, locale: string, style: 'long' | 'short'
 
 export function formatNumber(n: number | null | undefined, locale: string, maxFraction = 0) {
   if (n === null || n === undefined || Number.isNaN(n)) return '—';
-  return new Intl.NumberFormat(locale === 'ar' ? 'ar-AE' : 'en-GB', { maximumFractionDigits: maxFraction }).format(n);
+  return new Intl.NumberFormat(locale === 'ar' ? 'ar-AE-u-nu-latn' : 'en-GB', { maximumFractionDigits: maxFraction }).format(n);
 }
 
 export function formatMoney(n: number | null | undefined, currency: string, locale: string) {
   if (n === null || n === undefined) return '—';
-  return new Intl.NumberFormat(locale === 'ar' ? 'ar-AE' : 'en-GB', { style: 'currency', currency, maximumFractionDigits: 2 }).format(n);
+  return new Intl.NumberFormat(locale === 'ar' ? 'ar-AE-u-nu-latn' : 'en-GB', { style: 'currency', currency, maximumFractionDigits: 2 }).format(n);
 }
