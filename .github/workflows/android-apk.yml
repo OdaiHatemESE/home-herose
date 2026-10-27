@@ -52,6 +52,16 @@ jobs:
       - name: Generate native Android project
         run: npx expo prebuild --platform android --no-install
 
+      # Install the exact NDK the React Native build asks for up front (Gradle's on-the-fly install can fail on CI)
+      - name: Install Android NDK
+        run: |
+          ndk=$(grep -oE 'ndkVersion\s*=\s*"[0-9.]+"' android/build.gradle | grep -oE '[0-9.]+' | head -1)
+          ndk=${ndk:-27.1.12297006}
+          echo "NDK $ndk"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;$ndk" > /dev/null
+          ls "$ANDROID_HOME/ndk"
+
       - name: Give Gradle more memory
         run: |
           sed -i '/^org.gradle.jvmargs/d' android/gradle.properties
